@@ -12,17 +12,7 @@ import model.TrainBooking;
 import model.TravelClass;
 import model.User;
 
-/**
- * BookingService.java
- * ---------------------------------------------------------------
- * Books train tickets and finds existing bookings.
- * It does not do the small jobs itself; it uses (composition):
- *   SeatAvailabilityService -> are enough seats free?
- *   SeatAllocator           -> give seats to the passengers
- *   PnrGenerator            -> new unique PNR
- *   FareCalculator          -> total fare
- *   BookingRepository       -> save / find bookings
- */
+
 public class BookingService {
 
     private final BookingRepository bookingRepository;
@@ -43,13 +33,7 @@ public class BookingService {
         this.fareCalculator = fareCalculator;
     }
 
-    /**
-     * Books a ticket: allocates the first free seats automatically,
-     * generates a unique PNR and saves the booking for the user.
-     *
-     * @return the new booking, or null if the class is not available
-     *         on this train or there are not enough seats
-     */
+    
     public TrainBooking bookTicket(User user, Train train, LocalDate date,
                                    TravelClass travelClass, Quota quota,
                                    List<Passenger> passengers) {
@@ -67,12 +51,10 @@ public class BookingService {
         return booking;
     }
 
-    /** Finds a booking by PNR, or null if the PNR does not exist. */
     public TrainBooking findBookingByPnr(String pnr) {
         return bookingRepository.findByPnr(pnr);
     }
 
-    /** Only the bookings of the given user (never other users' bookings). */
     public List<TrainBooking> getBookingsOfUser(String username) {
         return bookingRepository.findByUsername(username);
     }
